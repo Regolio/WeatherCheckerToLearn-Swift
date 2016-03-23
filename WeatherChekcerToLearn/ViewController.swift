@@ -9,8 +9,9 @@
 import UIKit
 import CoreLocation
 
-class ViewController: UIViewController, UITextFieldDelegate, NSURLSessionDelegate{
+class ViewController: UIViewController, UITextFieldDelegate, NSURLSessionDelegate, CLLocationManagerDelegate{
     
+    //MARK: constant
     let API_KEY: String = "&APPID=5fee61bb7040b46210589d7527d7fa4f";
     let WEATHER_URL: String = "http://www.openweathermap.org/data/2.5/";
     let WEATHER_DAILY: String = "weather?q=";
@@ -18,7 +19,11 @@ class ViewController: UIViewController, UITextFieldDelegate, NSURLSessionDelegat
     let WEATHER_BY_GEO_LAT: String = "lat=";
     let WEATHER_BY_GEO_LON: String = "&lon=";
     let CELVIN_TO_CELSIUS: Double = 273.15;
+    let locationManager = CLLocationManager();
     
+    //MARK: Variables
+    var lon: Double = 0.0;
+    var lat: Double = 0.0;
     var cityString: String!;
     
     //MARK: Outlet
@@ -101,6 +106,8 @@ class ViewController: UIViewController, UITextFieldDelegate, NSURLSessionDelegat
         task.resume();
         
     }
+    
+    //MARK: Methodes
     override func viewDidLoad() {
         super.viewDidLoad()
         self.cityName.delegate = self;
@@ -110,7 +117,12 @@ class ViewController: UIViewController, UITextFieldDelegate, NSURLSessionDelegat
         self.locationManager.distanceFilter = 0;
         self.locationManager.startUpdatingLocation();
     }
-
+    
+    override func viewDidDisappear(animated: Bool) {
+        super.viewDidDisappear(true);
+        self.locationManager.stopUpdatingLocation();
+    }
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
@@ -124,6 +136,7 @@ class ViewController: UIViewController, UITextFieldDelegate, NSURLSessionDelegat
         cityName.resignFirstResponder();
         return true;
     }
+    
 
 }
 
